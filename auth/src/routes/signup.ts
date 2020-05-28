@@ -1,13 +1,12 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import crypto from "crypto";
-import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-import { RequestValidationError } from "../errors/request-validation-error";
 import { User } from "../models/user";
 import { BadRequestError } from "../errors/BadRequestError";
 import { EmailVerificationToken } from "../models/email-verification-token";
 import { InternalServerError } from "../errors/InternalServerError";
+import { validateRequest } from "../middlewares/validate-Request";
 
 const router = express.Router();
 
@@ -19,13 +18,8 @@ router.post(
       .isLength({ min: 4, max: 20 })
       .withMessage("PASSWORD MUST BE BETWEEN 4 AND 20 CHARACTERS"),
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
-
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
@@ -51,9 +45,10 @@ router.post(
     );
 
     if (isEmailSent) {
-      return res
-        .status(200)
-        .send("A verification email has been sent to " + user.email + ".");
+      return res.status(200).send({
+        response: "A verification email has been sent to " + user.email + ".",
+        data: JSON.stringify(savedUser),
+      });
     } else {
       throw new InternalServerError();
     }
