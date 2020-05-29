@@ -10,6 +10,7 @@ import { emailVerificationRouter } from "./routes/confirm-email";
 import { handleError } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
 import { User } from "./models/user";
+import { currentUserRouter } from "./routes/current-user";
 
 const app = express();
 app.set("trust proxy", true); // this is because request is being proxied through ingress-nginx
@@ -33,6 +34,7 @@ app.use(userSignupRouter);
 app.use(userSigninRouter);
 app.use(userSignoutRouter);
 app.use(emailVerificationRouter);
+app.use(currentUserRouter);
 
 app.all("*", () => {
   throw new NotFoundError();

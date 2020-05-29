@@ -2,13 +2,13 @@ import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user";
-import { BadRequestError } from "../errors/BadRequestError";
+import { BadRequestError } from "../errors/bad-request-error";
 import { Password } from "../utilities/password";
 import { validateRequest } from "../middlewares/validate-Request";
 
 const router = express.Router();
 
-router.get(
+router.post(
   "/api/user/signin",
   [
     body("email").isEmail().withMessage("Invalid email"),
@@ -29,7 +29,7 @@ router.get(
     );
 
     if (!isPasswordCorrect) {
-      return res.status(401).send("incorrect password");
+      return res.status(401).send("invalid credentials");
     }
 
     if (!existingUser.isVerified) {
@@ -42,7 +42,7 @@ router.get(
       jwt: userJwt,
     };
 
-    return res.status(200).send("voila");
+    return res.status(200).send(JSON.stringify(existingUser));
   }
 );
 
