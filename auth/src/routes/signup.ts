@@ -45,7 +45,7 @@ router.post(
     );
 
     if (isEmailSent) {
-      return res.status(200).send({
+      return res.status(201).send({
         response: "A verification email has been sent to " + user.email + ".",
         data: JSON.stringify(savedUser),
       });
