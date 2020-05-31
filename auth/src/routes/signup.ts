@@ -52,8 +52,6 @@ router.post(
     } else {
       throw new InternalServerError();
     }
-
-    res.status(200).send(JSON.stringify(savedUser));
   }
 );
 
@@ -83,8 +81,6 @@ const sendVerificationToken = (email: string, token: string): boolean => {
     if (error) {
       console.log(error);
       return false;
-    } else {
-      console.log("Server is ready to take our messages");
     }
   });
   var isEmailSent = true;
