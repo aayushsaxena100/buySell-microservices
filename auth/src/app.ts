@@ -6,8 +6,7 @@ import { userSignupRouter } from "./routes/signup";
 import { userSigninRouter } from "./routes/signin";
 import { userSignoutRouter } from "./routes/signout";
 import { emailVerificationRouter } from "./routes/confirm-email";
-import { handleError } from "./middlewares/error-handler";
-import { NotFoundError } from "./errors/not-found-error";
+import { handleError, NotFoundError } from "@bechna-khareedna/common";
 import { User } from "./models/user";
 import { currentUserRouter } from "./routes/current-user";
 

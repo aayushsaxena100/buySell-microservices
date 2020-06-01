@@ -1,0 +1,38 @@
+#prettier-ignore
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sales-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sales-mongo
+  template:
+    metadata:
+      labels:
+        app: sales-mongo
+    spec:
+      containers:
+      - name: sales-mongo
+        image: mongo
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+#prettier-ignore
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sales-mongo-srv
+spec:
+  selector:
+    app: sales-mongo
+  ports:
+  - name: db
+    protocol: TCP
+    port: 27017
+    targetPort: 27017

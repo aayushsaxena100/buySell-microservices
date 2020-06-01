@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
-import { setCurrentUser } from "../middlewares/set-current-user";
-import { authenticateUser } from "../middlewares/authenticate-user";
+import { setCurrentUser } from "@bechna-khareedna/common";
 
 const router = express.Router();
 

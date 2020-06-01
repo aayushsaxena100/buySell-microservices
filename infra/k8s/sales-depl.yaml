@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: sales-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: sales
   template:
     metadata:
       labels:
-        app: auth
+        app: sales
     spec:
       containers:
-      - name: auth
-        image: aayushsaxena100/auth
+      - name: sales
+        image: aayushsaxena100/sales
         env:
           - name: MONGO_URI
-            value: 'mongodb://auth-mongo-srv:27017/auth'
+            value: 'mongodb://sales-mongo-srv:27017/sales'
           - name: JWT_KEY
             valueFrom:
                 secretKeyRef:
@@ -28,12 +28,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: sales-srv
 spec:
   selector:
-    app: auth
+    app: sales
   ports:
-    - name: auth
+    - name: sales
       protocol: TCP
       port: 3000
       targetPort: 3000

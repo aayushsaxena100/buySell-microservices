@@ -3,10 +3,12 @@ import { body } from "express-validator";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import { User } from "../models/user";
-import { BadRequestError } from "../errors/bad-request-error";
+import {
+  BadRequestError,
+  InternalServerError,
+  validateRequest,
+} from "@bechna-khareedna/common";
 import { EmailVerificationToken } from "../models/email-verification-token";
-import { InternalServerError } from "../errors/internal-server-error";
-import { validateRequest } from "../middlewares/validate-Request";
 
 const router = express.Router();
 
