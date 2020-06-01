@@ -8,6 +8,7 @@ import {
   setCurrentUser,
 } from "@bechna-khareedna/common";
 import { createItemForSale } from "./routes/create-item";
+import { getSalesItemsRouter } from "./routes/get-items";
 
 const app = express();
 app.set("trust proxy", true); // this is because request is being proxied through ingress-nginx
@@ -24,6 +25,7 @@ app.use(
 app.use(setCurrentUser);
 
 app.use(createItemForSale);
+app.use(getSalesItemsRouter);
 
 app.all("*", () => {
   throw new NotFoundError();
