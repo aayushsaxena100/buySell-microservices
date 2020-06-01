@@ -1,13 +1,14 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { authenticateUser, validateRequest } from "@bechna-khareedna/common";
+import { SalesItem } from "../models/sales-item";
 
 const router = express.Router();
 
 //create an item to put on sale
 
 router.post(
-  "/api/sale/items",
+  "/api/sales/items",
   authenticateUser,
   [
     body("title")
@@ -20,7 +21,16 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    return res.status(201).send({});
+    const { title, price } = req.body;
+
+    const salesItem = SalesItem.build({
+      title,
+      price,
+      userId: req.currentUser?.id!,
+    });
+
+    await salesItem.save();
+    return res.status(201).send(JSON.stringify(salesItem));
   }
 );
 
