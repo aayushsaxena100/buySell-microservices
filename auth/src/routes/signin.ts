@@ -35,7 +35,10 @@ router.post(
       return res.status(401).send("please verify the email before login");
     }
 
-    const userJwt = jwt.sign({ id: existingUser._id }, process.env.JWT_KEY!);
+    const userJwt = jwt.sign(
+      { id: existingUser._id, email: existingUser.email },
+      process.env.JWT_KEY!
+    );
 
     req.session = {
       jwt: userJwt,

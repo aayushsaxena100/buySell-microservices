@@ -30,7 +30,7 @@ router.post(
     });
 
     await salesItem.save();
-    return res.status(201).send(JSON.stringify(salesItem));
+    return res.status(201).send(salesItem);
   }
 );
 

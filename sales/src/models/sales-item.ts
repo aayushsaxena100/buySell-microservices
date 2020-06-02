@@ -11,9 +11,9 @@ interface ISalesItemModel extends mongoose.Model<ISalesItemDoc> {
 }
 
 interface ISalesItemDoc extends mongoose.Document {
-  email: String;
-  password: String;
-  isVerified: boolean;
+  title: string;
+  price: number;
+  userId: string;
 }
 
 const salesItemSchema = new mongoose.Schema(
