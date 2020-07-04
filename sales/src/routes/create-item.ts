@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { authenticateUser, validateRequest } from "@bechna-khareedna/common";
 import { SalesItem } from "../models/sales-item";
+import { SellItemCreatedPublisher } from "../events/publishers/sellItem-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -30,6 +32,14 @@ router.post(
     });
 
     await salesItem.save();
+
+    new SellItemCreatedPublisher(natsWrapper.client).publish({
+      id: salesItem.id,
+      title: salesItem.title,
+      price: salesItem.price,
+      userId: salesItem.userId,
+    });
+
     return res.status(201).send(salesItem);
   }
 );

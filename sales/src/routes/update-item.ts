@@ -6,6 +6,8 @@ import {
   authenticateUser,
   validateRequest,
 } from "@bechna-khareedna/common";
+import { natsWrapper } from "../nats-wrapper";
+import { SellItemUpdatedPublisher } from "../events/publishers/sellItem-updated-publisher";
 
 const router = express.Router();
 
@@ -36,6 +38,14 @@ router.put(
       price,
     });
     await salesItem.save();
+
+    new SellItemUpdatedPublisher(natsWrapper.client).publish({
+      id: salesItem.id,
+      title: salesItem.title,
+      price: salesItem.price,
+      userId: salesItem.userId,
+    });
+
     return res.status(200).send(salesItem);
   }
 );
