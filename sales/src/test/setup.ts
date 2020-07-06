@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import { app } from "../app";
 import { createDocumentId } from "../utility/mongoose-utility";
 
+jest.mock("../nats-wrapper.ts");
+
 declare global {
   namespace NodeJS {
     interface Global {
@@ -29,6 +31,9 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   const collections = await mongoose.connection.db.collections();
+
+  jest.clearAllMocks();
+
   for (let collection of collections) {
     await collection.deleteMany({});
   }

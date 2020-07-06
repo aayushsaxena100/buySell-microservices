@@ -17,6 +17,14 @@ spec:
       - name: sales
         image: aayushsaxena100/sales
         env:
+          - name: NATS_CLIENT_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NATS_URL
+            value: 'http://nats-srv:4222'
+          - name: NATS_CLUSTER_ID
+            value: 'buyAndSell'
           - name: MONGO_URI
             value: 'mongodb://sales-mongo-srv:27017/sales'
           - name: JWT_KEY
