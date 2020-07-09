@@ -17,3 +17,4 @@ export * from "./events/base-publisher";
 export * from "./events/sellItem-created-event";
 export * from "./events/sellItem-updated-event";
 export * from "./events/subjects";
+export * from "./events/types/order-status";

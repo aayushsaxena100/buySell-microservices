@@ -1,7 +1,7 @@
 {
-  "name": "sales",
+  "name": "orders",
   "version": "1.0.0",
-  "description": "sales service",
+  "description": "orders service",
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --poll src/index.ts",
@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@bechna-khareedna/common": "^1.0.4",
+    "@bechna-khareedna/common": "^1.0.5",
     "@types/cookie-session": "^2.0.40",
     "@types/express": "^4.17.6",
     "@types/jsonwebtoken": "^8.5.0",

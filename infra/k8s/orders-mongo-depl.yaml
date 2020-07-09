@@ -3,19 +3,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sales-mongo-depl
+  name: orders-mongo-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sales-mongo
+      app: orders-mongo
   template:
     metadata:
       labels:
-        app: sales-mongo
+        app: orders-mongo
     spec:
       containers:
-      - name: sales-mongo
+      - name: orders-mongo
         image: mongo
         resources:
           limits:
@@ -27,10 +27,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: sales-mongo-srv
+  name: orders-mongo-srv
 spec:
   selector:
-    app: sales-mongo
+    app: orders-mongo
   ports:
   - name: db
     protocol: TCP
