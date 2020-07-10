@@ -7,7 +7,7 @@ import {
   NotFoundError,
   setCurrentUser,
 } from "@bechna-khareedna/common";
-import { deleteOrderRouter } from "./routes/delete";
+import { deleteOrderRouter } from "./routes/cancel";
 import { newOrderRouter } from "./routes/new";
 import { showOrderRouter } from "./routes/show";
 import { getAllOrdersRouter } from "./routes/index";
