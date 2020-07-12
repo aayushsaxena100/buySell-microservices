@@ -9,6 +9,8 @@ import {
 import { body } from "express-validator";
 import { SellItem } from "../models/sell-item";
 import { Order } from "../models/orders";
+import { natsWrapper } from "../nats-wrapper";
+import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
 
 const router = express.Router();
 
@@ -53,6 +55,16 @@ router.post(
     await order.save();
 
     //Publish an event that the order has been created
+    new OrderCreatedPublisher(natsWrapper.client).publish({
+      id: order.id,
+      status: order.status,
+      userId: req.currentUser!.id,
+      expiresAt: order.expiresAt.toISOString(),
+      sellItem: {
+        id: sellItem.id,
+        price: sellItem.price,
+      },
+    });
 
     res.status(201).send(order);
   }

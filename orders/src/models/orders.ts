@@ -14,7 +14,7 @@ interface OrderAttributes {
 interface OrderDoc extends mongoose.Document {
   userId: string;
   status: OrderStatus;
-  expiresAt: string;
+  expiresAt: Date;
   sellItem: SellItemDoc;
 }
 

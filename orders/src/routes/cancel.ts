@@ -5,8 +5,11 @@ import {
   NotFoundError,
   NotAuthorizedError,
   OrderStatus,
+  OrderCancelledEvent,
 } from "@bechna-khareedna/common";
 import { Order } from "../models/orders";
+import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -18,7 +21,7 @@ router.patch(
       throw new NotFoundError();
     }
 
-    const order = await Order.findById(req.params.orderId);
+    const order = await Order.findById(req.params.orderId).populate("sellItem");
 
     if (!order) {
       throw new NotFoundError();
@@ -32,6 +35,12 @@ router.patch(
     await order.save();
 
     //publish a order cancelled event
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      sellItem: {
+        id: order.sellItem.id,
+      },
+    });
 
     res.status(200).send(order);
   }

@@ -3,6 +3,7 @@ import request from "supertest";
 import { app } from "../../app";
 import { Order, OrderStatus } from "../../models/orders";
 import { SellItem } from "../../models/sell-item";
+import { natsWrapper } from "../../nats-wrapper";
 
 it("returns 404 error if the sell item does not exist", async () => {
   const sellItemId = mongoose.Types.ObjectId();
@@ -55,4 +56,19 @@ it("reserves a sell item", async () => {
     .expect(201);
 });
 
-it.todo("emits an order created event");
+it("emits an order created event", async () => {
+  const sellItem = SellItem.build({
+    title: "ps4",
+    price: 20000,
+  });
+  await sellItem.save();
+
+  //create order for the same sell item
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", global.signin())
+    .send({ sellItemId: sellItem.id })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});

@@ -3,6 +3,7 @@ import { app } from "../../app";
 import mongoose from "mongoose";
 import { SellItem } from "../../models/sell-item";
 import { OrderStatus } from "../../models/orders";
+import { natsWrapper } from "../../nats-wrapper";
 
 const buildSellItem = async () => {
   const sellItem = SellItem.build({
@@ -70,4 +71,24 @@ it("throws a 401 not authorized error if user tries to cancel another user's ord
     .expect(401);
 });
 
-it.todo("publish a order cancelled event");
+it("publish a order cancelled event", async () => {
+  //create a sell item
+  const sellItem = await buildSellItem();
+
+  const user = global.signin();
+
+  //create an order
+  const { body: order } = await request(app)
+    .post("/api/orders")
+    .set("Cookie", user)
+    .send({ sellItemId: sellItem.id })
+    .expect(201);
+
+  //cancel the order
+  const { body: cancelledOrder } = await request(app)
+    .patch(`/api/orders/cancel/${order.id}`)
+    .set("Cookie", user)
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
