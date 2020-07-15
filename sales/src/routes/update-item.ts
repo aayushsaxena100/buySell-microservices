@@ -39,7 +39,7 @@ router.put(
     });
     await salesItem.save();
 
-    new SellItemUpdatedPublisher(natsWrapper.client).publish({
+    await new SellItemUpdatedPublisher(natsWrapper.client).publish({
       id: salesItem.id,
       title: salesItem.title,
       price: salesItem.price,

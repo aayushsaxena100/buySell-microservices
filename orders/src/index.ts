@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
+import { SellItemCreatedListener } from "./events/listeners/sell-item-created-listner";
+import { SellItemUpdatedListener } from "./events/listeners/sell-item-updated-listner";
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -32,6 +34,13 @@ const start = async () => {
     });
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
+
+    const sellItemCreatedListener = new SellItemCreatedListener(
+      natsWrapper.client
+    ).listen();
+    const sellItemUpdatedListener = new SellItemUpdatedListener(
+      natsWrapper.client
+    ).listen();
 
     await mongoose.connect(process.env.MONGO_URI!, {
       useNewUrlParser: true,
