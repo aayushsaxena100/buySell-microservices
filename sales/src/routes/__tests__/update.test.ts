@@ -3,10 +3,10 @@ import { app } from "../../app";
 import { createDocumentId } from "../../utility/mongoose-utility";
 
 it("returns a status of 401 if user not authenticated", async () => {
-  const salesItemId = createDocumentId();
+  const sellItemId = createDocumentId();
 
   await request(app)
-    .put(`/api/sales/items/${salesItemId}`)
+    .put(`/api/sales/items/${sellItemId}`)
     .send({
       title: "Blah Blah",
       price: 10,
@@ -15,10 +15,10 @@ it("returns a status of 401 if user not authenticated", async () => {
 });
 
 it("returns a status of 404 if no item on sale with provided id", async () => {
-  const salesItemId = createDocumentId();
+  const sellItemId = createDocumentId();
 
   await request(app)
-    .put(`/api/sales/items/${salesItemId}`)
+    .put(`/api/sales/items/${sellItemId}`)
     .set("Cookie", global.signin())
     .send({
       title: "Blah Blah",
@@ -108,12 +108,12 @@ it("updates sale item if valid title and price is provided", async () => {
     })
     .expect(200);
 
-  const saleItemResponse = await request(app)
+  const sellItemResponse = await request(app)
     .get(`/api/sales/items/${response.body.id}`)
     .set("Cookie", cookie)
     .send()
     .expect(200);
 
-  expect(saleItemResponse.body.title).toEqual("New title");
-  expect(saleItemResponse.body.price).toEqual(15);
+  expect(sellItemResponse.body.title).toEqual("New title");
+  expect(sellItemResponse.body.price).toEqual(15);
 });

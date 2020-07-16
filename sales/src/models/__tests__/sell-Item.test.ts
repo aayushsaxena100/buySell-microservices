@@ -1,8 +1,8 @@
-import { SalesItem } from "../sales-item";
+import { SellItem } from "../sell-item";
 
 it("implements optimistic concurrency control", async (done) => {
   //Create a sell item
-  const sellItem = SalesItem.build({
+  const sellItem = SellItem.build({
     title: "Cycle",
     price: 120,
     userId: "asdasd",
@@ -12,8 +12,8 @@ it("implements optimistic concurrency control", async (done) => {
   await sellItem.save();
 
   //Fetch the same sell item twice
-  const firstInstance = await SalesItem.findById(sellItem.id);
-  const secondInstance = await SalesItem.findById(sellItem.id);
+  const firstInstance = await SellItem.findById(sellItem.id);
+  const secondInstance = await SellItem.findById(sellItem.id);
 
   //make two separate changes to both instances
   firstInstance?.set({ price: 100 });

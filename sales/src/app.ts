@@ -7,9 +7,9 @@ import {
   NotFoundError,
   setCurrentUser,
 } from "@bechna-khareedna/common";
-import { createItemForSale } from "./routes/create-item";
-import { getSalesItemsRouter } from "./routes/get-items";
-import { updateSalesItemRouter } from "./routes/update-item";
+import { createSellItem } from "./routes/create-item";
+import { getSellItemsRouter } from "./routes/get-items";
+import { updateSellItemRouter } from "./routes/update-item";
 
 const app = express();
 app.set("trust proxy", true); // this is because request is being proxied through ingress-nginx
@@ -25,9 +25,9 @@ app.use(
 
 app.use(setCurrentUser);
 
-app.use(createItemForSale);
-app.use(getSalesItemsRouter);
-app.use(updateSalesItemRouter);
+app.use(createSellItem);
+app.use(getSellItemsRouter);
+app.use(updateSellItemRouter);
 
 app.all("*", () => {
   throw new NotFoundError();

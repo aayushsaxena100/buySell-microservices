@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { authenticateUser, validateRequest } from "@bechna-khareedna/common";
-import { SalesItem } from "../models/sales-item";
+import { SellItem } from "../models/sell-item";
 import { SellItemCreatedPublisher } from "../events/publishers/sellItem-created-publisher";
 import { natsWrapper } from "../nats-wrapper";
 
@@ -25,24 +25,24 @@ router.post(
   async (req: Request, res: Response) => {
     const { title, price } = req.body;
 
-    const salesItem = SalesItem.build({
+    const sellItem = SellItem.build({
       title,
       price,
       userId: req.currentUser?.id!,
     });
 
-    await salesItem.save();
+    await sellItem.save();
 
     await new SellItemCreatedPublisher(natsWrapper.client).publish({
-      id: salesItem.id,
-      title: salesItem.title,
-      price: salesItem.price,
-      userId: salesItem.userId,
-      version: salesItem.version,
+      id: sellItem.id,
+      title: sellItem.title,
+      price: sellItem.price,
+      userId: sellItem.userId,
+      version: sellItem.version,
     });
 
-    return res.status(201).send(salesItem);
+    return res.status(201).send(sellItem);
   }
 );
 
-export { router as createItemForSale };
+export { router as createSellItem };

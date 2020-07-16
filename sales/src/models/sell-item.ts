@@ -1,24 +1,24 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
-interface ISalesItem {
+interface ISellItem {
   title: string;
   price: number;
   userId: string;
 }
 
-interface ISalesItemModel extends mongoose.Model<ISalesItemDoc> {
-  build(salesItem: ISalesItem): ISalesItemDoc;
+interface ISellItemModel extends mongoose.Model<ISellItemDoc> {
+  build(sellItem: ISellItem): ISellItemDoc;
 }
 
-interface ISalesItemDoc extends mongoose.Document {
+interface ISellItemDoc extends mongoose.Document {
   title: string;
   price: number;
   userId: string;
   version: number;
 }
 
-const salesItemSchema = new mongoose.Schema(
+const sellItemSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -43,16 +43,16 @@ const salesItemSchema = new mongoose.Schema(
   }
 );
 
-salesItemSchema.set("versionKey", "version");
-salesItemSchema.plugin(updateIfCurrentPlugin);
+sellItemSchema.set("versionKey", "version");
+sellItemSchema.plugin(updateIfCurrentPlugin);
 
-salesItemSchema.statics.build = (saleItem: ISalesItemModel) => {
-  return new SalesItem(saleItem);
+sellItemSchema.statics.build = (sellItem: ISellItemModel) => {
+  return new SellItem(sellItem);
 };
 
-const SalesItem = mongoose.model<ISalesItemDoc, ISalesItemModel>(
-  "SaleItem",
-  salesItemSchema
+const SellItem = mongoose.model<ISellItemDoc, ISellItemModel>(
+  "SellItem",
+  sellItemSchema
 );
 
-export { SalesItem };
+export { SellItem };

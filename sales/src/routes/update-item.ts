@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import { SalesItem } from "../models/sales-item";
+import { SellItem } from "../models/sell-item";
 import {
   NotFoundError,
   authenticateUser,
@@ -12,7 +12,7 @@ import { SellItemUpdatedPublisher } from "../events/publishers/sellItem-updated-
 const router = express.Router();
 
 router.put(
-  "/api/sales/items/:saleItemId",
+  "/api/sales/items/:sellItemId",
   authenticateUser,
   [
     body("title").notEmpty().withMessage("title cannot be empty"),
@@ -22,33 +22,33 @@ router.put(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const salesItem = await SalesItem.findById(req.params.saleItemId);
+    const sellItem = await SellItem.findById(req.params.sellItemId);
 
-    if (!salesItem) {
+    if (!sellItem) {
       throw new NotFoundError();
     }
 
-    if (salesItem.userId !== req.currentUser?.id) {
+    if (sellItem.userId !== req.currentUser?.id) {
       return res.status(401).send();
     }
 
     const { title, price } = req.body;
-    salesItem.set({
+    sellItem.set({
       title,
       price,
     });
-    await salesItem.save();
+    await sellItem.save();
 
     await new SellItemUpdatedPublisher(natsWrapper.client).publish({
-      id: salesItem.id,
-      title: salesItem.title,
-      price: salesItem.price,
-      userId: salesItem.userId,
-      version: salesItem.version,
+      id: sellItem.id,
+      title: sellItem.title,
+      price: sellItem.price,
+      userId: sellItem.userId,
+      version: sellItem.version,
     });
 
-    return res.status(200).send(salesItem);
+    return res.status(200).send(sellItem);
   }
 );
 
-export { router as updateSalesItemRouter };
+export { router as updateSellItemRouter };
