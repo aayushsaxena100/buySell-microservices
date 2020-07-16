@@ -7,5 +7,6 @@ export interface SellItemUpdatedEvent {
     title: string;
     price: number;
     userId: string;
+    version: number;
   };
 }
