@@ -12,7 +12,7 @@ export class SellItemUpdatedListener extends Listener<SellItemUpdatedEvent> {
   readonly queueGroupName = Constants.QueueGroupName;
 
   async onMessage(data: SellItemUpdatedEvent["data"], msg: Message) {
-    const sellItem = await SellItem.findById(data.id);
+    const sellItem = await SellItem.findByIdAndPreviousVersion(data);
 
     if (!sellItem) {
       throw new Error("Ticket not found");
