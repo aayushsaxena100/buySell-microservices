@@ -45,6 +45,7 @@ router.put(
       price: sellItem.price,
       userId: sellItem.userId,
       version: sellItem.version,
+      orderId: null
     });
 
     return res.status(200).send(sellItem);

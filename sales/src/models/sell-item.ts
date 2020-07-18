@@ -16,6 +16,7 @@ interface ISellItemDoc extends mongoose.Document {
   price: number;
   userId: string;
   version: number;
+  orderId: string | null; //Optional
 }
 
 const sellItemSchema = new mongoose.Schema(
@@ -31,6 +32,11 @@ const sellItemSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true,
+    },
+    orderId: {
+      type: String,
+      required: false,
+      default: null,
     },
   },
   {
