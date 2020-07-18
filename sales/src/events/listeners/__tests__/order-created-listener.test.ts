@@ -47,7 +47,6 @@ it('sets the orderId of sell Item', async () => {
 
     const updatedSellItem = await SellItem.findById(sellItem.id);
 
-    console.log(updatedSellItem?.orderId);
     expect(updatedSellItem?.orderId).toEqual(data.id);
 });
 
