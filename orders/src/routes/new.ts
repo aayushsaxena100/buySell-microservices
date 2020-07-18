@@ -57,6 +57,7 @@ router.post(
     //Publish an event that the order has been created
     new OrderCreatedPublisher(natsWrapper.client).publish({
       id: order.id,
+      version: order.version,
       status: order.status,
       userId: req.currentUser!.id,
       expiresAt: order.expiresAt.toISOString(),

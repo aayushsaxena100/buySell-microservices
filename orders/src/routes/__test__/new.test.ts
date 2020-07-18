@@ -5,6 +5,17 @@ import { Order, OrderStatus } from "../../models/orders";
 import { SellItem } from "../../models/sell-item";
 import { natsWrapper } from "../../nats-wrapper";
 
+const createSellItem = async () => {
+  const sellItem = SellItem.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: "ps4",
+    price: 20000,
+  });
+  await sellItem.save();
+
+  return sellItem;
+};
+
 it("returns 404 error if the sell item does not exist", async () => {
   const sellItemId = mongoose.Types.ObjectId();
 
@@ -17,11 +28,7 @@ it("returns 404 error if the sell item does not exist", async () => {
 
 it("returns 400 error if the sell item is already reserved", async () => {
   //create a sell item
-  const sellItem = SellItem.build({
-    title: "ps4",
-    price: 20000,
-  });
-  await sellItem.save();
+  const sellItem = await createSellItem();
 
   //create order for the same sell item
   const order = Order.build({
@@ -42,11 +49,7 @@ it("returns 400 error if the sell item is already reserved", async () => {
 
 it("reserves a sell item", async () => {
   //create a sell item
-  const sellItem = SellItem.build({
-    title: "ps4",
-    price: 20000,
-  });
-  await sellItem.save();
+  const sellItem = await createSellItem();
 
   //create order for the same sell item
   await request(app)
@@ -57,11 +60,7 @@ it("reserves a sell item", async () => {
 });
 
 it("emits an order created event", async () => {
-  const sellItem = SellItem.build({
-    title: "ps4",
-    price: 20000,
-  });
-  await sellItem.save();
+  const sellItem = await createSellItem();
 
   //create order for the same sell item
   await request(app)

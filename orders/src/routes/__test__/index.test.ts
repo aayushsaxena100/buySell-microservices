@@ -1,9 +1,11 @@
 import request from "supertest";
 import { app } from "../../app";
+import mongoose from "mongoose";
 import { SellItem } from "../../models/sell-item";
 
 const buildSellItem = async () => {
   const sellItem = SellItem.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "ps4",
     price: 20,
   });

@@ -7,6 +7,7 @@ import { natsWrapper } from "../../nats-wrapper";
 
 const buildSellItem = async () => {
   const sellItem = SellItem.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "ps4",
     price: 20,
   });
