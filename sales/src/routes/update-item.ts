@@ -5,6 +5,7 @@ import {
   NotFoundError,
   authenticateUser,
   validateRequest,
+  BadRequestError,
 } from "@bechna-khareedna/common";
 import { natsWrapper } from "../nats-wrapper";
 import { SellItemUpdatedPublisher } from "../events/publishers/sellItem-updated-publisher";
@@ -32,6 +33,10 @@ router.put(
       return res.status(401).send();
     }
 
+    if(sellItem.orderId){
+      throw new BadRequestError('sell-item is reserved and cannot be currently edited')
+    }
+    
     const { title, price } = req.body;
     sellItem.set({
       title,
