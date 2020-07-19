@@ -3,6 +3,7 @@ import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
 import { SellItemCreatedListener } from "./events/listeners/sell-item-created-listner";
 import { SellItemUpdatedListener } from "./events/listeners/sell-item-updated-listner";
+import { ExpirationCompleteListener } from "./events/listeners/expiration-complete-listener";
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -35,10 +36,13 @@ const start = async () => {
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
 
-    const sellItemCreatedListener = new SellItemCreatedListener(
+    new SellItemCreatedListener(
       natsWrapper.client
     ).listen();
-    const sellItemUpdatedListener = new SellItemUpdatedListener(
+    new SellItemUpdatedListener(
+      natsWrapper.client
+    ).listen();
+    new ExpirationCompleteListener(
       natsWrapper.client
     ).listen();
 
