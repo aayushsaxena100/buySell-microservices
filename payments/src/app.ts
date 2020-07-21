@@ -7,6 +7,7 @@ import {
   NotFoundError,
   setCurrentUser,
 } from "@bechna-khareedna/common";
+import { CreateTransactionRouter } from "./routes/new";
 
 const app = express();
 app.set("trust proxy", true); // this is because request is being proxied through ingress-nginx
@@ -21,6 +22,8 @@ app.use(
 );
 
 app.use(setCurrentUser);
+
+app.use(CreateTransactionRouter);
 
 app.all("*", () => {
   throw new NotFoundError();

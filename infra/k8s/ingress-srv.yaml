@@ -23,3 +23,7 @@ spec:
             backend:
               serviceName: orders-srv
               servicePort: 3000
+          - path: /api/payments/?(.*)
+            backend:
+              serviceName: payments-srv
+              servicePort: 3000
