@@ -14,6 +14,8 @@ declare global {
 
 let mongo: any;
 
+process.env.STRIPE_KEY = 'use the test api key from stripe';
+
 beforeAll(async () => {
   process.env.JWT_KEY = "superfakekey";
 

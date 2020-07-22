@@ -9,6 +9,8 @@ import {
     OrderStatus
 } from "@bechna-khareedna/common";
 import { Order } from "../models/order";
+import { stripe } from "../stripe"
+import { Payment } from "../models/payments";
 
 const router = express.Router();
 
@@ -22,23 +24,34 @@ router.post('/api/payments',
  ],
  validateRequest,
  async (req: Request, res: Response)=> {
-     const { token, orderId} = req.body;
+    const { token, orderId} = req.body;
 
-     const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId);
 
-     if(!order){
-         throw new NotFoundError();
-     }
+    if(!order){
+        throw new NotFoundError();
+    }
 
-     if(order.userId !== req.currentUser?.id){
-         throw new NotAuthorizedError();
-     }
+    if(order.userId !== req.currentUser?.id){
+        throw new NotAuthorizedError();
+    }
 
-     if(order.status == OrderStatus.Cancelled){
-         throw new BadRequestError('Cannot pay for cancelled order')
-     }
+    if(order.status == OrderStatus.Cancelled){
+        throw new BadRequestError('Cannot pay for cancelled order');
+    }
 
-     res.send({success:true});
+    const charge = await stripe.charges.create({
+        currency: 'INR',
+        amount: order.price * 100,
+        source: token
+    });
+
+    const payment = Payment.build({
+        orderId: orderId,
+        stripeId: charge.id
+    });
+    await payment.save();
+    res.status(201).send({success:true});
  });
 
- export { router as CreateTransactionRouter };
+ export { router as CreateChargeRouter };
