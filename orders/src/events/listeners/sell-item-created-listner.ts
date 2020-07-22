@@ -21,6 +21,9 @@ export class SellItemCreatedListener extends Listener<SellItemCreatedEvent> {
     });
     await sellItem.save();
 
+    // todo publish order updated event and listen
+    // in sales service to update the sell item to sold
+    
     msg.ack();
   }
 }
